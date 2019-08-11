@@ -1057,16 +1057,15 @@ const contents = `
 </html>
 `;
 
-const regex1 = /<div class="col-xs-12 col-sm-4 col-md-2">■透明度([\s\S]*?)<div class="col-xs-12 col-sm-4 col-md-2">/;
+const regex1 = /<span id="ContentPlaceHolder1_DataList2_InfoMdLabel_0">★<span style="color:#0000ff;font-weight:bold;">([\s\S]*?)<\/span>/;
 const result1 = contents.match(regex1);
 
-const regex2 = /<span id="ContentPlaceHolder1_DataList2_ClearnessLabel_0">([\s\S]*?)<\/span><\/div>/;
-result1 && console.log(result1[1]);
-
 if (result1) {
-    const result2 = contents.match(regex2);
-    result2 && console.log(result2[1]);
+    console.log(result1[1]);
+} else {
+    console.log('なし');
 }
+
 
 
 
