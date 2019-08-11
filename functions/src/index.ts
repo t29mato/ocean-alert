@@ -8,11 +8,8 @@ admin.initializeApp();
 
 export const crawlingDivingSpot = functions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
     // 最新のデータを取得する
-    console.log('hogehoge');
     await admin.database().ref(constants.spots.iwa.dbPath).limitToLast(1).once('value')
         .then((snapshot) => {
-            console.log('snapshot');
-            console.log(snapshot.val());
             const options = {
                 method: 'GET',
                 uri: constants.spots.iwa.uri,
