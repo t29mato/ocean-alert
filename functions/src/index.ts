@@ -47,6 +47,7 @@ export const crawlingDivingSpot = functions.pubsub.schedule('every 1 minutes').o
                         waterClarity,
                         createdAt: response.headers.date,
                         updateTrigger,
+                        uri: constants.spots.iwa.uri,
                     }
                     admin.database().ref(constants.spots.iwa.dbPath).push(seaCondition);
                     console.log('DBへの書き込みに成功');
