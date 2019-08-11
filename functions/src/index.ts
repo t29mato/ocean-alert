@@ -16,17 +16,18 @@ export const crawlingDivingSpot = functions.pubsub.schedule('every 1 minutes').o
                 encoding: null,
             };
             request(options, (error, response, body) => {
-                console.log(response.statusCode);
                 if (error) {
                     console.warn(error);
                     return null;
                 }
+
+                // 文字化け対策のDecode処理
                 const buf = Buffer.from(body, 'binary');
                 const retStr = iconv.decode(buf, constants.spots.iwa.charset);
-                const resultUpdateTrigger = retStr.match(constants.spots.iwa.regexp.updateTrigger);
-                const updateTrigger = resultUpdateTrigger && resultUpdateTrigger[1];
 
                 // 更新トリガーに変更がなければ処理終了
+                const resultUpdateTrigger = retStr.match(constants.spots.iwa.regexp.updateTrigger);
+                const updateTrigger = resultUpdateTrigger && resultUpdateTrigger[1];
                 if (snapshot.val() !== null) {
                     const keys = Object.keys(snapshot.val());
                     const updateTriggerLatest = snapshot.val()[keys[0]].updateTrigger;
@@ -35,8 +36,12 @@ export const crawlingDivingSpot = functions.pubsub.schedule('every 1 minutes').o
                         return null;
                     }
                 }
+
+                // 透明度取得
                 const resultWaterClarity = retStr.match(constants.spots.iwa.regexp.waterClarity);
                 const waterClarity = resultWaterClarity && resultWaterClarity[1];
+
+                // DBへの書き込み
                 try {
                     const seaCondition = {
                         waterClarity,
